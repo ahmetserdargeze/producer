@@ -1,0 +1,88 @@
+---
+version: '2'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  producer:
+    image: producer1:latest
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      HOST_IP: Istanbul
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+    restart: always
+
+  producer1:
+      image: producer1:latest
+      depends_on:
+        - kafka
+      ports:
+        - "8090:8090"
+      environment:
+        HOST_IP: Tokyo
+        SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+      restart: always
+
+  producer2:
+     image: producer1:latest
+     depends_on:
+       - kafka
+     ports:
+       - "9000:9000"
+     environment:
+       HOST_IP: Moscow
+       SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+     restart: always
+  producer3:
+      image: producer1:latest
+      depends_on:
+        - kafka
+      ports:
+        - "9010:9010"
+      environment:
+        HOST_IP: Beijing
+        SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+      restart: always
+
+  producer4:
+     image: producer1:latest
+     depends_on:
+       - kafka
+     ports:
+       - "9020:9020"
+     environment:
+       HOST_IP: London
+       SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+     restart: always
+
+
+  consumer:
+    image: consumer1:latest
+    ports:
+      - "9030:9030"
+    depends_on:
+      - producer
+      - kafka
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+    restart: always

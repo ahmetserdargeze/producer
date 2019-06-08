@@ -12,20 +12,22 @@ public class ProducerApplication implements CommandLineRunner {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    private static String valueFromFile=System.getenv("HOST_IP");
+
+
     public static void main(String[] args) {
+        System.out.println(valueFromFile+"***********");
         SpringApplication.run(ProducerApplication.class, args
         );
     }
 
-//    @Value("${value.from.file}")
-//    private String valueFromFile;
 
     @Override
     public void run(String... args) throws Exception {
         try {
-            for(int i = 0;i<100000;i++){
-//                System.out.println(valueFromFile+"***********");
-                kafkaTemplate.send("Topic1","deneme"+i);
+            for(int i = 0;i<20;i++){
+//                System.out.println("*************"+valueFromFile+"***********");
+                kafkaTemplate.send("Topic1","*******"+valueFromFile+"*****"+i);
             }
 
         }catch (Exception e){
