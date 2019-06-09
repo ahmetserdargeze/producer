@@ -1,4 +1,6 @@
 package com.ahmedgeze.producer.conf;
+
+import com.ahmedgeze.producer.model.Log;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -14,21 +16,27 @@ import java.util.Map;
 @Configuration
 public class KafkaConfiguration {
 
+
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
-        Map<String, Object> config = new HashMap<>();
-
-//        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "10.3.0.2:9092");
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:29092");
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-
-        return new DefaultKafkaProducerFactory<>(config);
+    public Map<String, Object> producerConfigs() {
+        Map<String, Object> props = new HashMap<>();
+        //for run local
+//        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        //for run docker-compose
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:29092");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return props;
     }
 
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
+    public ProducerFactory<String, Log> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
+
+    @Bean
+    public KafkaTemplate<String, Log> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

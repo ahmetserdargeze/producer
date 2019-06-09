@@ -47,4 +47,15 @@ public class Log {
     public void setLogDetail(String logDetail) {
         this.logDetail = logDetail;
     }
+
+
+    @Override
+    public String toString() {
+        return "Log{" +
+                "date='" + date + '\'' +
+                ", logLevel='" + logLevel + '\'' +
+                ", city='" + city + '\'' +
+                ", logDetail='" + logDetail + '\'' +
+                '}';
+    }
 }

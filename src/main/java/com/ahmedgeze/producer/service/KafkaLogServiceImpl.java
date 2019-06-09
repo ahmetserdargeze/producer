@@ -6,7 +6,9 @@ import com.ahmedgeze.producer.util.SpringBeanConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +19,21 @@ import java.util.Random;
 @Service(value = SpringBeanConstants.SERVICE_KAFKA_LOG)
 public class KafkaLogServiceImpl implements KafkaLogService {
 
+
+
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, Log> kafkaTemplate;
 
     @Autowired
     private ObjectMapper jacksonObjectMapper;
 
 
-    private  String valueFromFile=System.getenv("HOST_IP");
+    private  String valueFromFile=System.getenv("SERVER_CITY_NAME");
 
 
 
     @Override
-    public Log createRandomLog() {
+    public Log  createRandomLog() {
 
         Random rn = new Random();
         int randomId = rn.nextInt(5) + 1;
@@ -38,7 +42,6 @@ public class KafkaLogServiceImpl implements KafkaLogService {
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             Log log = new Log(formatter.format(date), logLevelEnum.getName(), this.valueFromFile, "logDetail");
-            ObjectMapper mapper = new ObjectMapper();
             return log;
 
 
@@ -51,12 +54,11 @@ public class KafkaLogServiceImpl implements KafkaLogService {
     public void sendLogToKafka() {
         Log log = createRandomLog();
         if (log != null) {
-            try {
-                kafkaTemplate.send("Topic1", jacksonObjectMapper.writeValueAsString(log));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-
+            Message<Log> message = MessageBuilder
+                    .withPayload(log)
+                    .setHeader(KafkaHeaders.TOPIC, "Topic1")
+                    .build();
+                kafkaTemplate.send( message);
         }
 
     }

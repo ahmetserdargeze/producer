@@ -1,8 +1,5 @@
 ---
 version: '3.3'
-volumes:
-  database_data:
-    driver: local
 
 services:
   zookeeper:
@@ -32,86 +29,54 @@ services:
     ports:
       - "8080:8080"
     environment:
-      HOST_IP: Istanbul
+      SERVER_CITY_NAME: Istanbul
+      LOG_INTERVAL : 10000
       SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
     restart: always
 
   producer1:
-      image: producer1:latest
-      depends_on:
-        - kafka
-      ports:
-        - "8090:8090"
-      environment:
-        HOST_IP: Tokyo
-        SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
-      restart: always
+    image: producer1:latest
+    depends_on:
+      - kafka
+    ports:
+      - "8090:8090"
+    environment:
+      SERVER_CITY_NAME: Tokyo
+      LOG_INTERVAL: 30000
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+    restart: always
 
   producer2:
-     image: producer1:latest
-     depends_on:
-       - kafka
-     ports:
-       - "9000:9000"
-     environment:
-       HOST_IP: Moscow
-       SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
-     restart: always
+    image: producer1:latest
+    depends_on:
+      - kafka
+    ports:
+      - "9000:9000"
+    environment:
+      SERVER_CITY_NAME: Moscow
+      LOG_INTERVAL: 60000
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+    restart: always
   producer3:
-      image: producer1:latest
-      depends_on:
-        - kafka
-      ports:
-        - "9010:9010"
-      environment:
-        HOST_IP: Beijing
-        SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
-      restart: always
+    image: producer1:latest
+    depends_on:
+      - kafka
+    ports:
+      - "9010:9010"
+    environment:
+      SERVER_CITY_NAME: Beijing
+      LOG_INTERVAL: 100000
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+    restart: always
 
   producer4:
-     image: producer1:latest
-     depends_on:
-       - kafka
-     ports:
-       - "9020:9020"
-     environment:
-       HOST_IP: London
-       SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
-     restart: always
-
-  postgres:
-    container_name: postgres_container
-    image: postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      PGDATA: /data/postgres
-    volumes:
-      - database_data:/data/postgres
+    image: producer1:latest
+    depends_on:
+      - kafka
     ports:
-      - "5432:5432"
-    restart: unless-stopped
-
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
+      - "9020:9020"
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-    volumes:
-      - database_data:/root/.pgadmin
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    restart: unless-stopped
-
-#
-#  consumer:
-#    image: consumer1:latest
-#    ports:
-#      - "9030:9030"
-#    depends_on:
-#      - producer
-#      - kafka
-#    environment:
-#      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
-#    restart: always
+      SERVER_CITY_NAME: London
+      LOG_INTERVAL: 150000
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+    restart: always
