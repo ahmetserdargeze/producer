@@ -1,7 +1,7 @@
-package com.ahmedgeze.producer.service;
+package com.ahmedserdargeze.kafkaproducer.service;
 
 
-import com.ahmedgeze.producer.model.Log;
+import com.ahmedserdargeze.kafkaproducer.model.Log;
 
 public interface KafkaLogService {
 

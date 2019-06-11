@@ -1,6 +1,6 @@
-package com.ahmedgeze.producer.conf;
+package com.ahmedserdargeze.kafkaproducer.conf;
 
-import com.ahmedgeze.producer.model.Log;
+import com.ahmedserdargeze.kafkaproducer.model.Log;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;

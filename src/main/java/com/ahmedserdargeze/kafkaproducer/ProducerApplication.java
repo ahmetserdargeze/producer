@@ -1,8 +1,8 @@
-package com.ahmedgeze.producer;
+package com.ahmedserdargeze.kafkaproducer;
 
-import com.ahmedgeze.producer.model.Log;
-import com.ahmedgeze.producer.service.KafkaLogService;
-import com.ahmedgeze.producer.util.SpringBeanConstants;
+import com.ahmedserdargeze.kafkaproducer.model.Log;
+import com.ahmedserdargeze.kafkaproducer.service.KafkaLogService;
+import com.ahmedserdargeze.kafkaproducer.util.SpringBeanConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;

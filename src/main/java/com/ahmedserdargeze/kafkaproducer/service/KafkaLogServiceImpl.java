@@ -1,9 +1,8 @@
-package com.ahmedgeze.producer.service;
+package com.ahmedserdargeze.kafkaproducer.service;
 
-import com.ahmedgeze.producer.model.Log;
-import com.ahmedgeze.producer.model.LogLevelEnum;
-import com.ahmedgeze.producer.util.SpringBeanConstants;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ahmedserdargeze.kafkaproducer.model.Log;
+import com.ahmedserdargeze.kafkaproducer.model.LogLevelEnum;
+import com.ahmedserdargeze.kafkaproducer.util.SpringBeanConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.support.KafkaHeaders;

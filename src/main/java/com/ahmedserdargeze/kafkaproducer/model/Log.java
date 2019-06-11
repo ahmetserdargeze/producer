@@ -1,4 +1,4 @@
-package com.ahmedgeze.producer.model;
+package com.ahmedserdargeze.kafkaproducer.model;
 
 public class Log {
     private String date;
